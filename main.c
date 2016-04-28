@@ -16,6 +16,7 @@ void codec_write(Uint32 output_data);
 
 #define BUFFER_SIZE 7680000
 short input_buffer[BUFFER_SIZE];
+void input_buffer_clean(void);
 #pragma DATA_SECTION(input_buffer,".EXTRAM")
 
 
@@ -31,7 +32,7 @@ int main(){
     codec_init();
 
     while(1){
-        //Recording data
+        //Processing data
         if(DSK6713_DIP_get(3)==0){
             //Initialize processing
             leds_output(LED_STATE_ACTIVE);
@@ -79,6 +80,12 @@ Uint32 codec_read(void){
 
 void codec_write(Uint32 output_data){
     while(!(DSK6713_AIC23_write(manejador,output_data)));
+}
+
+void input_buffer_clean(void){
+    for(int i = 0; i < BUFFER_SIZE; i++){
+        input_buffer[k] = 0;
+    }
 }
 
 void leds_output(short state){
